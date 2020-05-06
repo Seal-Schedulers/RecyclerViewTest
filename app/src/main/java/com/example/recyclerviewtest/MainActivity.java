@@ -1,6 +1,8 @@
 package com.example.recyclerviewtest;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,11 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CityAdapter.OnNoteListener {
 
+    private static final String TAG = "MainActivity";
     private RecyclerView cities;
     private RecyclerView.Adapter adapter;
-    ArrayList<City> list = new ArrayList<>();
+    static ArrayList<City> list = new ArrayList<>();
 
 
     @Override
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         this.cities.setLayoutManager(mLayoutManager);
 
-        adapter = new CityAdapter(list);
+        adapter = new CityAdapter(list, this);
         this.cities.setAdapter(adapter);
     }
 
@@ -40,5 +43,14 @@ public class MainActivity extends AppCompatActivity {
     public void createMoreCities(View v) {
         list.add(new City("Worcester", "Quite a boring city compared to the rest of these."));
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNoteClick(int position) {
+        Log.d(TAG, "onNoteClick: clicked");
+
+        Intent intent = new Intent(this, RemoveActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
     }
 }

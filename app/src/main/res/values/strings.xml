@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RecyclerViewTest</string>
+    <string name="yesStr">Yes</string>
+    <string name="noStr">No</string>
 </resources>

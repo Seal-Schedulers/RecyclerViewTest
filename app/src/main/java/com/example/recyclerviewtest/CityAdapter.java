@@ -15,9 +15,11 @@ import java.util.ArrayList;
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     private ArrayList<City> cities;
+    private OnNoteListener mOnNoteListener;
 
-    public CityAdapter(ArrayList<City> cities) {
+    public CityAdapter(ArrayList<City> cities, OnNoteListener onNoteListener) {
         this.cities = cities;
+        this.mOnNoteListener = onNoteListener;
     }
 
     @NonNull
@@ -25,7 +27,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
 
-        return new ViewHolder(v);
+        return new ViewHolder(v, mOnNoteListener);
     }
 
     @Override
@@ -45,16 +47,30 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View view;
         public final TextView name;
         public final TextView description;
+        OnNoteListener onNoteListener;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, OnNoteListener onNoteListener) {
             super(view);
             this.view = view;
             name = view.findViewById(R.id.name);
             description = view.findViewById(R.id.description);
+            this.onNoteListener = onNoteListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onNoteListener.onNoteClick(getAdapterPosition());
         }
     }
+
+    public interface OnNoteListener{
+        void onNoteClick(int position);
+    }
+
 }
